@@ -1,0 +1,46 @@
+.bold {
+    font-weight: 700;
+}
+
+.regular {
+    font-weight: 400;
+}
+
+.semi-bold {
+    font-weight: 600;
+}
+
+.course-info {
+    width: 70%;
+}
+
+.course-details {
+    width: 30%;
+}
+
+.create-course-btn {
+    top: 36px;
+    right: 16px;
+}
+
+.fs-40 {
+    font-size: 40px;
+}
+
+.fs-25 {
+    font-size: 25px;
+}
+
+.author-list {
+    padding: 16px 60px 8px 16px;
+}
+
+.course-author-sec {
+    padding: 16px 60px 8px 16px;
+}
+
+.listScroll {
+    max-height: 200px;
+    overflow-y: auto;
+    min-height: 100px;
+}
