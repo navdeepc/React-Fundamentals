@@ -1,10 +1,18 @@
 import { Button } from '../../common/Button/Button';
 import Logo from './components/Logo/Logo';
 import titleLogo from '../../assets/course.png';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
+	const [token, updateToken] = useState(localStorage.getItem('token'));
+	const [userDetails, setUserDetails] = useState({});
+	const navigate = useNavigate();
 	function onLogout() {
-		alert('Dave Logged out!');
+		updateToken('');
+		// setUserDetails({});
+		localStorage.clear();
+		navigate('/login');
 	}
 
 	return (
@@ -13,14 +21,16 @@ function Header() {
 				<div>
 					<Logo imgSrc={titleLogo} height='50px' />
 				</div>
-				<div className='d-flex align-items-center'>
-					<span className='pe-5'>Dave</span>
-					<Button
-						name='Logout'
-						class='btn btn-info bg-transparent'
-						click={() => onLogout()}
-					></Button>
-				</div>
+				{token && (
+					<div className='d-flex align-items-center'>
+						<span className='pe-5'>{userDetails?.name || 'Dave'}</span>
+						<Button
+							name='Logout'
+							class='btn btn-info bg-transparent'
+							click={() => onLogout()}
+						></Button>
+					</div>
+				)}
 			</div>
 		</header>
 	);

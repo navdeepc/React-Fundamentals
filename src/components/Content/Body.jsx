@@ -1,11 +1,8 @@
+import { Outlet } from 'react-router-dom';
 import Courses from '../Courses/Courses';
 
 function Body() {
-	return (
-		<div className='border border-primary rounded'>
-			<Courses></Courses>
-		</div>
-	);
+	return <Outlet />;
 }
 
 export default Body;
