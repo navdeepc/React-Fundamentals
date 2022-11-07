@@ -30,7 +30,8 @@ function Login({ setUser, setToken }) {
 
 	useEffect(() => {
 		let token = localStorage.getItem('token');
-		if (token) {
+		let user = localStorage.getItem('userdetails');
+		if (token && user) {
 			navigate('/courses');
 		}
 	}, []);

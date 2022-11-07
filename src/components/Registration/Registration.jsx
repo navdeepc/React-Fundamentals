@@ -3,6 +3,7 @@ import Input from '../../common/Input/Input';
 import { Link, useNavigate } from 'react-router-dom';
 import { REGISTRATION } from '../../constants';
 import useFetch from '../../helpers/useFetch';
+import React, { useEffect } from 'react';
 
 function Registration() {
 	const navigate = useNavigate();
@@ -34,6 +35,14 @@ function Registration() {
 		name: 'Name',
 	});
 	const { request, data, error } = useFetch();
+
+	useEffect(() => {
+		let token = localStorage.getItem('token');
+		let user = localStorage.getItem('userdetails');
+		if (token && user) {
+			navigate('/courses');
+		}
+	}, []);
 
 	const handleSubmit = (e) => {
 		// const formData = new FormData(e.target);
