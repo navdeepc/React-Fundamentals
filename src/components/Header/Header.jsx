@@ -4,15 +4,9 @@ import titleLogo from '../../assets/course.png';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Header() {
-	const [token, updateToken] = useState(localStorage.getItem('token'));
-	const [userDetails, setUserDetails] = useState({});
-	const navigate = useNavigate();
+function Header({ user, tokenVal, logout }) {
 	function onLogout() {
-		updateToken('');
-		// setUserDetails({});
-		localStorage.clear();
-		navigate('/login');
+		logout();
 	}
 
 	return (
@@ -21,9 +15,9 @@ function Header() {
 				<div>
 					<Logo imgSrc={titleLogo} height='50px' />
 				</div>
-				{token && (
+				{tokenVal && Object.keys(user).length > 0 && (
 					<div className='d-flex align-items-center'>
-						<span className='pe-5'>{userDetails?.name || 'Dave'}</span>
+						<span className='pe-5'>{user?.name || ''}</span>
 						<Button
 							name='Logout'
 							class='btn btn-info bg-transparent'

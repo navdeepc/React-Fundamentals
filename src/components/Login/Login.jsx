@@ -3,8 +3,9 @@ import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 import { LOGIN } from '../../constants';
 import useFetch from '../../helpers/useFetch';
+import React, { useEffect } from 'react';
 
-function Login() {
+function Login({ setUser, setToken }) {
 	const navigate = useNavigate();
 
 	let [email, setEmail, setEmailValue] = Input({
@@ -27,6 +28,13 @@ function Login() {
 	});
 	const { request, data, error } = useFetch();
 
+	useEffect(() => {
+		let token = localStorage.getItem('token');
+		if (token) {
+			navigate('/courses');
+		}
+	}, []);
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const body = {
@@ -38,6 +46,8 @@ function Login() {
 			.then((res) => {
 				localStorage.setItem('token', res.result);
 				localStorage.setItem('userdetails', JSON.stringify(res.user));
+				setUser(res.user);
+				setToken(res.result);
 				navigate('/courses');
 			})
 			.catch((err) => {
