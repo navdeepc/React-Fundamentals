@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 export function Input(prop) {
 	const [value, setValue] = useState('');
@@ -28,5 +29,14 @@ export function Input(prop) {
 	);
 	return [value, input, setValue];
 }
+
+Input.propTypes = {
+	id: PropTypes.string,
+	class: PropTypes.string,
+	placeholder: PropTypes.string,
+	type: PropTypes.string,
+	name: PropTypes.string,
+	min: PropTypes.any,
+};
 
 export default Input;

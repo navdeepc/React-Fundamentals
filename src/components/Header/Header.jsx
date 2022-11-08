@@ -1,10 +1,12 @@
 import { Button } from '../../common/Button/Button';
 import Logo from './components/Logo/Logo';
 import titleLogo from '../../assets/course.png';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function Header() {
+function Header({ user, tokenVal, logout }) {
 	function onLogout() {
-		alert('Dave Logged out!');
+		logout();
 	}
 
 	return (
@@ -13,14 +15,16 @@ function Header() {
 				<div>
 					<Logo imgSrc={titleLogo} height='50px' />
 				</div>
-				<div className='d-flex align-items-center'>
-					<span className='pe-5'>Dave</span>
-					<Button
-						name='Logout'
-						class='btn btn-info bg-transparent'
-						click={() => onLogout()}
-					></Button>
-				</div>
+				{tokenVal && Object.keys(user).length > 0 && (
+					<div className='d-flex align-items-center'>
+						<span className='pe-5'>{user?.name || ''}</span>
+						<Button
+							name='Logout'
+							class='btn btn-info bg-transparent'
+							click={() => onLogout()}
+						></Button>
+					</div>
+				)}
 			</div>
 		</header>
 	);

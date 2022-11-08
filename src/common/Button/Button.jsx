@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 export function Button(prop) {
 	return (
 		<button
@@ -9,5 +10,11 @@ export function Button(prop) {
 		</button>
 	);
 }
+
+Button.propTypes = {
+	click: PropTypes.any,
+	class: PropTypes.string,
+	disabled: PropTypes.bool,
+};
 
 export default Button;

@@ -4,6 +4,8 @@ import AuthorItem from './components/AuthorItem/AuthorItem';
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import getCourseDuration from '../../helpers/getCourseDuration';
+import { mockedAuthorsList, mockedCoursesList } from '../../constants';
+import { useNavigate } from 'react-router-dom';
 const dayjs = require('dayjs');
 var duration = require('dayjs/plugin/duration');
 dayjs.extend(duration);
@@ -12,8 +14,9 @@ function CreateCourse({
 	setAuthorsList,
 	addNewCourseClick,
 	setCourseList,
-	courseList,
+	// courseList,
 }) {
+	const navigate = useNavigate();
 	const [title, setTitle] = Input({
 		labelText: 'Title',
 		id: 'title123',
@@ -40,9 +43,12 @@ function CreateCourse({
 		type: 'number',
 		name: 'duration',
 	});
-	const [addAuthorsList, updateaddAuthorsList] = useState(authorList);
+	const [addAuthorsList, updateaddAuthorsList] = useState([
+		...mockedAuthorsList,
+	]);
 	const [courseAuthorsList, updatecourseAuthorsList] = useState([]);
 	const [description, setDescription] = useState('');
+	const [courseList, updateCourseList] = useState(mockedCoursesList);
 
 	function randomStr(list) {
 		let id = uuidv4();
@@ -57,11 +63,12 @@ function CreateCourse({
 	function CreateAuthor(val) {
 		const newAuthor = {
 			name: val,
-			id: randomStr(authorList),
+			id: randomStr(addAuthorsList),
 		};
 		updateaddAuthorsList((oldArray) => [newAuthor, ...oldArray]);
-		setAuthorsList(newAuthor);
+		// setAuthorsList(newAuthor);
 		setValue('');
+		mockedAuthorsList.unshift(newAuthor);
 	}
 
 	function createNewCourse() {
@@ -69,13 +76,15 @@ function CreateCourse({
 			id: randomStr(courseList),
 			title: title,
 			description: description,
-			creationDate: dayjs().format('DD.MM.YYYY'),
+			creationDate: dayjs().format('DD/MM/YYYY'),
 			duration: duration,
 			authors: courseAuthorsList.map((x) => x.id),
 		};
-		setCourseList(newCourse);
-		updateaddAuthorsList(authorList);
-		addNewCourseClick();
+		updateCourseList((oldArray) => [newCourse, ...oldArray]);
+		// updateaddAuthorsList(authorList);
+		// addNewCourseClick();
+		mockedCoursesList.unshift(newCourse);
+		navigate('/courses');
 	}
 
 	function updateAuthorList(val, type) {
@@ -120,7 +129,7 @@ function CreateCourse({
 	}
 
 	return (
-		<div className='border border-primary rounded position-relative p-3'>
+		<div>
 			{/* <Input
 				labelText='Title'
 				id='title123'

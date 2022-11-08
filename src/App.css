@@ -44,3 +44,29 @@
     overflow-y: auto;
     min-height: 100px;
 }
+
+.body-content-min-height {
+    min-height: calc(100vh - 116px);
+}
+
+.center-element {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.w-40 {
+    width: 40%;
+}
+
+.w-60 {
+    width: 60%;
+}
+
+.black {
+    color: #212529;
+}
+
+.text-break-spaces {
+    white-space: break-spaces;
+}
