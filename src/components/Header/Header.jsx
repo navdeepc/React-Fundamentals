@@ -3,8 +3,12 @@ import Logo from './components/Logo/Logo';
 import titleLogo from '../../assets/course.png';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getUser } from './../../selectors';
 
 function Header({ user, tokenVal, logout }) {
+	const userDetails = useSelector(getUser);
+
 	function onLogout() {
 		logout();
 	}
@@ -17,7 +21,9 @@ function Header({ user, tokenVal, logout }) {
 				</div>
 				{tokenVal && Object.keys(user).length > 0 && (
 					<div className='d-flex align-items-center'>
-						<span className='pe-5'>{user?.name || ''}</span>
+						<span className='pe-5'>
+							{userDetails?.name || user?.name || ''}
+						</span>
 						<Button
 							name='Logout'
 							class='btn btn-info bg-transparent'

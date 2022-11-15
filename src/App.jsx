@@ -9,9 +9,12 @@ import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import Login from './components/Login/Login';
 import Registration from './components/Registration/Registration';
 import CourseInfo from './components/CourseInfo/CourseInfo';
+import { useDispatch } from 'react-redux';
+import { userLogout } from './store/user/actions';
 
 function App() {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const [token, setToken] = useState(() => localStorage.getItem('token') || '');
 
 	const [user, setUser] = useState({});
@@ -42,10 +45,16 @@ function App() {
 		localStorage.clear();
 		setToken('');
 		setUser({});
+		dispatch(
+			userLogout({
+				token: '',
+				name: '',
+				email: '',
+			})
+		);
 	}
 
 	return (
-		// <BrowserRouter>
 		<div className='container-fluid'>
 			<Header
 				user={user}
@@ -73,7 +82,6 @@ function App() {
 			</div> */}
 			{/* <Body></Body> */}
 		</div>
-		// </BrowserRouter>
 	);
 }
 
