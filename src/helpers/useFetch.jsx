@@ -25,7 +25,7 @@ function useFetch() {
 				throw e;
 			}
 		},
-		post: async (url, method, body) => {
+		post: async (url, body) => {
 			try {
 				let options = {
 					method: 'POST',

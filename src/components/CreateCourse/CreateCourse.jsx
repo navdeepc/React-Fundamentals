@@ -4,8 +4,12 @@ import AuthorItem from './components/AuthorItem/AuthorItem';
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import getCourseDuration from '../../helpers/getCourseDuration';
-import { mockedAuthorsList, mockedCoursesList } from '../../constants';
+// import { mockedAuthorsList, mockedCoursesList } from '../../constants'; // using authorsList and courses instead
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAuthors, getCourses } from '../../selectors';
+import { addAuthorsAction } from '../../store/authors/actions';
+import { addCoursesAction } from '../../store/courses/actions';
 const dayjs = require('dayjs');
 var duration = require('dayjs/plugin/duration');
 dayjs.extend(duration);
@@ -16,6 +20,9 @@ function CreateCourse({
 	setCourseList,
 	// courseList,
 }) {
+	const courses = useSelector(getCourses);
+	const authorsList = useSelector(getAuthors);
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [title, setTitle] = Input({
 		labelText: 'Title',
@@ -43,12 +50,10 @@ function CreateCourse({
 		type: 'number',
 		name: 'duration',
 	});
-	const [addAuthorsList, updateaddAuthorsList] = useState([
-		...mockedAuthorsList,
-	]);
+	const [addAuthorsList, updateaddAuthorsList] = useState([...authorsList]);
 	const [courseAuthorsList, updatecourseAuthorsList] = useState([]);
 	const [description, setDescription] = useState('');
-	const [courseList, updateCourseList] = useState(mockedCoursesList);
+	const [courseList, updateCourseList] = useState(courses);
 
 	function randomStr(list) {
 		let id = uuidv4();
@@ -68,7 +73,8 @@ function CreateCourse({
 		updateaddAuthorsList((oldArray) => [newAuthor, ...oldArray]);
 		// setAuthorsList(newAuthor);
 		setValue('');
-		mockedAuthorsList.unshift(newAuthor);
+		// mockedAuthorsList.unshift(newAuthor);
+		dispatch(addAuthorsAction(newAuthor));
 	}
 
 	function createNewCourse() {
@@ -83,7 +89,8 @@ function CreateCourse({
 		updateCourseList((oldArray) => [newCourse, ...oldArray]);
 		// updateaddAuthorsList(authorList);
 		// addNewCourseClick();
-		mockedCoursesList.unshift(newCourse);
+		// mockedCoursesList.unshift(newCourse);
+		dispatch(addCoursesAction(newCourse));
 		navigate('/courses');
 	}
 

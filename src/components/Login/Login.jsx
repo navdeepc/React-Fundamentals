@@ -4,9 +4,12 @@ import Input from '../../common/Input/Input';
 import { LOGIN } from '../../constants';
 import useFetch from '../../helpers/useFetch';
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { userLogin } from '../../store/user/actions';
 
 function Login({ setUser, setToken }) {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
 	let [email, setEmail, setEmailValue] = Input({
 		labelText: 'Email',
@@ -43,12 +46,19 @@ function Login({ setUser, setToken }) {
 			password: pswd,
 		};
 		request
-			.post(LOGIN, 'POST', body)
+			.post(LOGIN, body)
 			.then((res) => {
 				localStorage.setItem('token', res.result);
 				localStorage.setItem('userdetails', JSON.stringify(res.user));
 				setUser(res.user);
 				setToken(res.result);
+				dispatch(
+					userLogin({
+						token: res.result,
+						name: res.user.name,
+						email: res.user.email,
+					})
+				);
 				navigate('/courses');
 			})
 			.catch((err) => {
