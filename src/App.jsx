@@ -3,7 +3,7 @@ import Header from './components/Header/Header';
 // import Body from './components/Body/Body';
 import Courses from './components/Courses/Courses';
 import { mockedAuthorsList, mockedCoursesList } from './constants';
-import CreateCourse from './components/CreateCourse/CreateCourse';
+import CourseForm from './components/CourseForm/CourseForm';
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import Login from './components/Login/Login';
@@ -73,7 +73,7 @@ function App() {
 					<Route path='registration' element={<Registration />} />
 					<Route path='courses' element={<Courses />} />
 					<Route path='courses/:courseId' element={<CourseInfo />} />
-					<Route path='courses/add' element={<CreateCourse />} />
+					<Route path='courses/add' element={<CourseForm />} />
 				</Routes>
 			</div>
 			{/* <Header></Header>

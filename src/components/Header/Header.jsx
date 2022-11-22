@@ -1,8 +1,8 @@
 import { Button } from '../../common/Button/Button';
 import Logo from './components/Logo/Logo';
 import titleLogo from '../../assets/course.png';
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import React, { useState, useEffect } from 'react';
+// import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getUser } from './../../selectors';
 

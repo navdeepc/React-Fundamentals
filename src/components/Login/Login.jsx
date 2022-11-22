@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
-import { LOGIN } from '../../constants';
+import { LOGIN, USERS } from '../../constants';
 import useFetch from '../../helpers/useFetch';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -52,14 +52,25 @@ function Login({ setUser, setToken }) {
 				localStorage.setItem('userdetails', JSON.stringify(res.user));
 				setUser(res.user);
 				setToken(res.result);
-				dispatch(
-					userLogin({
-						token: res.result,
-						name: res.user.name,
-						email: res.user.email,
-					})
-				);
-				navigate('/courses');
+				if (res.result) {
+					request
+						.get(USERS, res.result)
+						.then((response) => {
+							console.log(res);
+							dispatch(
+								userLogin({
+									token: res.result,
+									name: response.name,
+									email: response.email,
+									role: response.role,
+								})
+							);
+							navigate('/courses');
+						})
+						.catch((err) => {
+							console.log(err);
+						});
+				}
 			})
 			.catch((err) => {
 				console.log(err);

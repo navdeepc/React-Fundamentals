@@ -1,7 +1,7 @@
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 import AuthorItem from './components/AuthorItem/AuthorItem';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import getCourseDuration from '../../helpers/getCourseDuration';
 // import { mockedAuthorsList, mockedCoursesList } from '../../constants'; // using authorsList and courses instead
@@ -10,10 +10,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getAuthors, getCourses } from '../../selectors';
 import { addAuthorsAction } from '../../store/authors/actions';
 import { addCoursesAction } from '../../store/courses/actions';
+import useFetch from './../../helpers/useFetch';
+
+import { AUTHORADD, COURSEADD } from '../../constants';
+import { GetAllAuthors } from './../../store/authors/thunk';
+
 const dayjs = require('dayjs');
 var duration = require('dayjs/plugin/duration');
 dayjs.extend(duration);
-function CreateCourse({
+function CourseForm({
 	authorList,
 	setAuthorsList,
 	addNewCourseClick,
@@ -50,10 +55,20 @@ function CreateCourse({
 		type: 'number',
 		name: 'duration',
 	});
-	const [addAuthorsList, updateaddAuthorsList] = useState([...authorsList]);
+	const [addAuthorsList, updateaddAuthorsList] = useState([]);
 	const [courseAuthorsList, updatecourseAuthorsList] = useState([]);
 	const [description, setDescription] = useState('');
 	const [courseList, updateCourseList] = useState(courses);
+	const { request, data, error } = useFetch();
+	let token = localStorage.getItem('token');
+
+	useEffect(() => {
+		dispatch(GetAllAuthors());
+	}, []);
+
+	useEffect(() => {
+		updateaddAuthorsList([...authorsList]);
+	}, [authorsList]);
 
 	function randomStr(list) {
 		let id = uuidv4();
@@ -70,11 +85,19 @@ function CreateCourse({
 			name: val,
 			id: randomStr(addAuthorsList),
 		};
-		updateaddAuthorsList((oldArray) => [newAuthor, ...oldArray]);
+		// updateaddAuthorsList((oldArray) => [newAuthor, ...oldArray]);
 		// setAuthorsList(newAuthor);
 		setValue('');
 		// mockedAuthorsList.unshift(newAuthor);
-		dispatch(addAuthorsAction(newAuthor));
+		// dispatch(addAuthorsAction(newAuthor));
+		request
+			.post(AUTHORADD, newAuthor, token)
+			.then((res) => {
+				dispatch(GetAllAuthors());
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	}
 
 	function createNewCourse() {
@@ -83,15 +106,22 @@ function CreateCourse({
 			title: title,
 			description: description,
 			creationDate: dayjs().format('DD/MM/YYYY'),
-			duration: duration,
+			duration: Number(duration),
 			authors: courseAuthorsList.map((x) => x.id),
 		};
-		updateCourseList((oldArray) => [newCourse, ...oldArray]);
+		// updateCourseList((oldArray) => [newCourse, ...oldArray]);
 		// updateaddAuthorsList(authorList);
 		// addNewCourseClick();
 		// mockedCoursesList.unshift(newCourse);
-		dispatch(addCoursesAction(newCourse));
-		navigate('/courses');
+		// dispatch(addCoursesAction(newCourse));
+		request
+			.post(COURSEADD, newCourse, token)
+			.then((res) => {
+				navigate('/courses');
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	}
 
 	function updateAuthorList(val, type) {
@@ -231,4 +261,4 @@ function CreateCourse({
 	);
 }
 
-export default CreateCourse;
+export default CourseForm;

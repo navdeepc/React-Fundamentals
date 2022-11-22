@@ -3,13 +3,33 @@ import Button from '../../../../common/Button/Button';
 import '../../../../App.css';
 import getCourseDuration from '../../../../helpers/getCourseDuration';
 import { useNavigate } from 'react-router-dom';
+import useFetch from './../../../../helpers/useFetch';
+import { COURSEDELETE } from './../../../../constants';
+import { GetAllCourses } from '../../../../store/courses/thunk';
+import { useDispatch } from 'react-redux';
 
 function CourseCard(prop) {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const { request, data, error } = useFetch();
 
 	function showCourse(courseId) {
 		navigate(`/courses/${courseId}`);
 	}
+
+	function deleteCourse(courseId) {
+		let body,
+			token = localStorage.getItem('token');
+		request
+			.delete(`${COURSEDELETE}/${courseId}`, body, token)
+			.then((res) => {
+				dispatch(GetAllCourses());
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
+
 	return (
 		<Card className='mb-2'>
 			<Card.Body>
@@ -39,6 +59,11 @@ function CourseCard(prop) {
 							name='Show Course'
 							class='btn btn-info bg-transparent'
 							click={() => showCourse(prop.course.id)}
+						></Button>
+						<Button
+							name='Delete'
+							class='btn btn-info bg-danger ms-2 border-0'
+							click={() => deleteCourse(prop.course.id)}
 						></Button>
 					</aside>
 				</div>

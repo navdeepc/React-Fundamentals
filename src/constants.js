@@ -51,6 +51,12 @@ export const mockedAuthorsList = [
 // API Urls
 export const hostURL = 'http://localhost:4000/';
 export const LOGIN = 'login';
+export const LOGOUT = 'logout';
 export const REGISTRATION = 'register';
 export const COURSES = 'courses/all';
+export const COURSEADD = 'courses/add';
+export const COURSEDELETE = 'courses';
+export const COURSEUPDATE = 'courses';
 export const AUTHORS = 'authors/all';
+export const AUTHORADD = 'authors/add';
+export const USERS = 'users/me';

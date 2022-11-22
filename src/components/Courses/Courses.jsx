@@ -3,13 +3,12 @@ import SearchBar from './components/SearchBar/SearchBar';
 
 import React, { useEffect, useState } from 'react';
 // import { mockedAuthorsList, mockedCoursesList } from '../../constants'; // replaced with authors and courses
-import { AUTHORS, COURSES } from '../../constants';
+
 import { useNavigate } from 'react-router-dom';
 import { getAuthors, getCourses } from './../../selectors';
 import { useSelector, useDispatch } from 'react-redux';
-import useFetch from './../../helpers/useFetch';
-import { getCoursesAction } from '../../store/courses/actions';
-import { getAuthorsAction } from './../../store/authors/actions';
+import { GetAllCourses } from './../../store/courses/thunk';
+import { GetAllAuthors } from '../../store/authors/thunk';
 
 function Courses(
 	{
@@ -20,16 +19,16 @@ function Courses(
 	const courses = useSelector(getCourses);
 	const authorList = useSelector(getAuthors);
 	const dispatch = useDispatch();
-	const { request, data, error } = useFetch();
 
 	const [filtererdList, searchCourseListList] = useState([]);
 
 	useEffect(() => {
-		getAllAuthors();
-		getAllCourses();
+		dispatch(GetAllAuthors());
+		dispatch(GetAllCourses());
 	}, []);
 
 	useEffect(() => {
+		console.log(courses);
 		searchCourseListList([...courses]);
 	}, [courses]);
 
@@ -48,28 +47,6 @@ function Courses(
 
 	function navigateToAddCourse() {
 		navigate('/courses/add');
-	}
-
-	function getAllCourses() {
-		request
-			.get(COURSES)
-			.then((res) => {
-				dispatch(getCoursesAction(res.result));
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	}
-
-	function getAllAuthors() {
-		request
-			.get(AUTHORS)
-			.then((res) => {
-				dispatch(getAuthorsAction(res.result));
-			})
-			.catch((err) => {
-				console.log(err);
-			});
 	}
 
 	return (

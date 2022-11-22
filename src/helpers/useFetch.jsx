@@ -8,9 +8,15 @@ function useFetch() {
 	const navigate = useNavigate();
 
 	const request = {
-		get: async (url) => {
+		get: async (url, token) => {
 			try {
-				const response = await fetch(`${hostURL}${url}`);
+				let options = {};
+				if (token) {
+					options.headers = {
+						Authorization: token,
+					};
+				}
+				const response = await fetch(`${hostURL}${url}`, options);
 				if (response.status === 401) {
 					navigate('/login');
 				}
@@ -25,7 +31,7 @@ function useFetch() {
 				throw e;
 			}
 		},
-		post: async (url, body) => {
+		post: async (url, body, token) => {
 			try {
 				let options = {
 					method: 'POST',
@@ -34,6 +40,38 @@ function useFetch() {
 						'Content-Type': 'application/json',
 					},
 				};
+				if (token) {
+					options.headers.Authorization = token;
+				}
+				const response = await fetch(`${hostURL}${url}`, options);
+				if (response.status === 401) {
+					navigate('/login');
+				}
+				if (!response.ok) {
+					throw response.status;
+				}
+				const data = await response.json();
+				setData(data);
+				return data;
+			} catch (e) {
+				setError(e);
+				throw e;
+			}
+		},
+		delete: async (url, body, token) => {
+			try {
+				let options = {
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				};
+				if (token) {
+					options.headers.Authorization = token;
+				}
+				if (body) {
+					options.body = body;
+				}
 				const response = await fetch(`${hostURL}${url}`, options);
 				if (response.status === 401) {
 					navigate('/login');
